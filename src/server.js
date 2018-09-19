@@ -21,13 +21,13 @@ const urlStruct = {
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
-    console.log(request['headers']);
+  console.log(request.headers);
   if (urlStruct[parsedUrl.pathname]) {
     urlStruct[parsedUrl.pathname](request, response, params);
   } else {
     urlStruct.notFound(request, response, params);
   }
-  //console.log(parsedUrl);
+  // console.log(parsedUrl);
 };
 
 http.createServer(onRequest).listen(port);
