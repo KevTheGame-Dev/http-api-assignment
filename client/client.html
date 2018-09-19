@@ -6,7 +6,106 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
+      const init = () => {
+        const requestSelector = document.querySelector("#page");
+        var requestValue = requestSelector.options[requestSelector.selectedIndex].value;
+        console.log(requestValue);
+        requestSelector.onchange = (e) => {
+          requestValue = e.target.value;
+          console.log(requestValue);
+        }
 
+        const sendButton = document.querySelector("#send");
+        const handleRequest = () => sendAjax(requestValue);
+        sendButton.addEventListener('click', handleRequest);
+
+      }
+
+      const handleResponse = (xhr) => {
+        const content = document.querySelector("#content");
+        
+        const requestTypeSelector = document.querySelector('#type');
+        var requestType = requestTypeSelector.options[requestTypeSelector.selectedIndex].value;
+
+        var obj = '';
+        if(requestType === 'application/json'){
+          obj = JSON.parse(xhr.response);
+
+          switch(xhr.status){
+            case 200:
+              content.innerHTML = `<h3>Success</h3> <div><p>${obj.message}</p></div>`;
+              break;
+            case 400:
+              content.innerHTML = `<h3>Bad request</h3> <div><p>${obj.message}</p></div>`;
+              break;
+            case 401:
+              content.innerHTML = `<h3>Unauthorized request</h3> <div><p>${obj.message}</p></div>`;
+              break;
+            case 403:
+              content.innerHTML = `<h3>Forbidden request</h3> <div><p>${obj.message}</p></div>`;
+              break;
+            case 500:
+              content.innerHTML = `<h3>Bad request</h3> <div><p>${obj.message}</p></div>`;
+              break;
+            case 501:
+              content.innerHTML = `<h3>Not implemented</h3> <div><p>${obj.message}</p></div>`;
+              break;
+            case 404:
+              content.innerHTML = `<h3>Resource not found</h3> <div><p>${obj.message}</p></div>`;
+              break;
+            default:
+              content.innerHTML = `<h3>Error code not implemented</h3>`;
+              break;
+          }
+        }
+        else{
+          obj = new DOMParser().parseFromString(xhr.response, 'text/xml');
+
+          switch(xhr.status){
+            case 200:
+              content.innerHTML = `<h3>Success</h3> <div><p>${obj.getElementsByTagName('message')[0].innerHTML}</p></div>`;
+              break;
+            case 400:
+              content.innerHTML = `<h3>Bad request</h3> <div><p>${obj.getElementsByTagName('message')[0].innerHTML}</p></div>`;
+              break;
+            case 401:
+              content.innerHTML = `<h3>Unauthorized request</h3> <div><p>${obj.getElementsByTagName('message')[0].innerHTML}</p></div>`;
+              break;
+            case 403:
+              content.innerHTML = `<h3>Forbidden request</h3> <div><p>${obj.getElementsByTagName('message')[0].innerHTML}</p></div>`;
+              break;
+            case 500:
+              content.innerHTML = `<h3>Bad request</h3> <div><p>${obj.getElementsByTagName('message')[0].innerHTML}</p></div>`;
+              break;
+            case 501:
+              content.innerHTML = `<h3>Not implemented</h3> <div><p>${obj.getElementsByTagName('message')[0].innerHTML}</p></div>`;
+              break;
+            case 404:
+              content.innerHTML = `<h3>Resource not found</h3> <div><p>${obj.getElementsByTagName('message')[0].innerHTML}</p></div>`;
+              break;
+            default:
+              content.innerHTML = `<h3>Error code not implemented</h3>`;
+              break;
+          }
+        }
+        console.log(obj);
+        
+      }
+      const sendAjax = (url) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.open('GET', url);
+
+        const requestTypeSelector = document.querySelector('#type');
+        var requestType = requestTypeSelector.options[requestTypeSelector.selectedIndex].value;
+        console.log(requestType);
+
+        xhr.setRequestHeader("Accept", requestType);
+        xhr.onload = () => handleResponse(xhr);
+        xhr.send();
+      }
+
+      window.onload = init;
   </script>
 </head>
 <body>
