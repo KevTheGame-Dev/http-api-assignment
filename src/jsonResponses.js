@@ -10,7 +10,7 @@ const respondJSON = (request, response, status, object) => {
   response.end();
 };
 
-const success = (request, response, params) => {
+const success = (request, response) => {
   const responseJSON = {
     message: 'Successful response',
   };
@@ -65,7 +65,7 @@ const unauthorized = (request, response, params) => {
   }
 };
 
-const forbidden = (request, response, params) => {
+const forbidden = (request, response) => {
   const responseJSON = {
     message: 'You do not have access to this content',
     id: 'forbidden',
@@ -74,7 +74,7 @@ const forbidden = (request, response, params) => {
   respondJSON(request, response, 403, responseJSON);
 };
 
-const internal = (request, response, params) => {
+const internal = (request, response) => {
   const responseJSON = {
     message: 'Internal server error',
     id: 'internal',
@@ -83,7 +83,7 @@ const internal = (request, response, params) => {
   respondJSON(request, response, 500, responseJSON);
 };
 
-const notImplemented = (request, response, params) => {
+const notImplemented = (request, response) => {
   const responseJSON = {
     message: 'Requested content has not been created',
     id: 'notImplemented',
@@ -92,7 +92,7 @@ const notImplemented = (request, response, params) => {
   respondJSON(request, response, 501, responseJSON);
 };
 
-const notFound = (request, response, params) => {
+const notFound = (request, response) => {
   const responseJSON = {
     message: 'Page not found',
     id: 'notFound',
